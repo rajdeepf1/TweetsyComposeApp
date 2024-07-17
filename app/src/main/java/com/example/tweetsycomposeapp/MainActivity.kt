@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 
         GlobalScope.launch {
             var resp = tweetsyApi.getCategories()
-            Log.d(TAG, "onCreate: ${resp.body().toString()}")
+            Log.d(TAG, "onCreate: ${resp.body()!!.distinct().toString()}")
         }
 
         enableEdgeToEdge()
