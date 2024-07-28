@@ -1,5 +1,6 @@
 package com.example.tweetsycomposeapp.viewmodels
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tweetsycomposeapp.models.TweetsDataModelItem
@@ -10,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(private val repository: TweetRepository) : ViewModel() {
+class DetailViewModel @Inject constructor(private val repository: TweetRepository, private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
     val tweets : StateFlow<List<TweetsDataModelItem>>
 
@@ -18,7 +19,8 @@ class DetailViewModel @Inject constructor(private val repository: TweetRepositor
 
     init {
         viewModelScope.launch {
-            repository.getTweet("Android")
+            val category = savedStateHandle.get<String>("category") ?: "Android"
+            repository.getTweet(category)
         }
     }
 

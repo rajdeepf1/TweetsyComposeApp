@@ -12,7 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.tweetsy.screens.CategoryScreen
 import com.example.tweetsycomposeapp.api.TweetsyApi
+import com.example.tweetsycomposeapp.screens.DetailScreen
 import com.example.tweetsycomposeapp.ui.theme.TweetsyComposeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
@@ -25,42 +32,43 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var tweetsyApi: TweetsyApi
 
-    private val TAG : String = MainActivity::class.java.name
+    private val TAG: String = MainActivity::class.java.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        GlobalScope.launch {
-            var resp = tweetsyApi.getCategories()
-            Log.d(TAG, "onCreate: ${resp.body()!!.distinct().toString()}")
-        }
+//        GlobalScope.launch {
+//            var resp = tweetsyApi.getCategories()
+//            Log.d(TAG, "onCreate: ${resp.body()!!.distinct().toString()}")
+//        }
 
-        enableEdgeToEdge()
+        // enableEdgeToEdge()
         setContent {
             TweetsyComposeAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                App()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun App() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "category") {
+        composable(route = "category") {
+            CategoryScreen(onClick = {
+                navController.navigate("detail/${it}")
+            })
+        }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TweetsyComposeAppTheme {
-        Greeting("Android")
+        composable(route = "detail/{category}", arguments = listOf(
+            navArgument("category") {
+                type = NavType.StringType
+            }
+        ))
+        {
+            DetailScreen()
+        }
     }
 }
+

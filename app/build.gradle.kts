@@ -72,6 +72,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation ("androidx.compose.material:material:1.2.0")
+
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
@@ -92,4 +94,5 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 }
